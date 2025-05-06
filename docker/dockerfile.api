@@ -1,19 +1,14 @@
-# Stage 1: Build NestJS
-FROM node:18 AS builder
+# docker/Dockerfile.api
+
+FROM node:18-alpine
 
 WORKDIR /app
-COPY ../car-markt-be/package*.json ./
+
+COPY package*.json ./
 RUN npm install
-COPY ../car-markt-be ./
-RUN npm run build
 
-# Stage 2: Run app
-FROM node:18
+COPY . .
 
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY ../car-markt-be/package*.json ./
-RUN npm install --production
+RUN  npx nx build car-markt-be
 
-EXPOSE 3000
 CMD ["node", "dist/main.js"]
