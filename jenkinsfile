@@ -1,0 +1,27 @@
+// Jenkinsfile
+
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/fauzanaslam/car-markt.git'
+      }
+    }
+
+    stage('Build and Deploy with Docker Compose') {
+      steps {
+        sh 'docker-compose down'
+        sh 'docker-compose build'
+        sh 'docker-compose up -d'
+      }
+    }
+  }
+
+  post {
+    always {
+      sh 'docker image prune -f'
+    }
+  }
+}

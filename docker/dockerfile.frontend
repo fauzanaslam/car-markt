@@ -1,0 +1,17 @@
+# docker/Dockerfile.frontend
+
+FROM node:18-alpine as builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npx nx build car-markt-web
+
+FROM nginx:alpine
+
+COPY --from=builder /app/dist/apps/frontend /usr/share/nginx/html
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
