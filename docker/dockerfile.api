@@ -25,4 +25,4 @@ COPY --from=builder /app/package*.json ./
 RUN npm install --production
 
 EXPOSE 3000
-CMD ["node", "dist/apps/car-markt-be/main.js"]
+CMD ["node", "apps/car-markt-be/dist/main.js"]
