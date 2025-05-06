@@ -9,12 +9,9 @@ COPY package*.json ./
 COPY tsconfig.base.json ./
 COPY nx.json ./
 COPY eslint.config.mjs ./
-COPY .npmrc ./  # jika kamu menggunakannya
 
 # Salin semua kode yang dibutuhkan
 COPY apps/car-markt-be ./apps/car-markt-be
-COPY libs ./libs
-COPY .nx ./.nx
 
 # Install dependencies
 RUN npm install
