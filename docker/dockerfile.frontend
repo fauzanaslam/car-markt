@@ -13,5 +13,5 @@ RUN npx nx build car-markt-web
 
 FROM nginx:alpine
 
-COPY --from=builder /app/dist/apps/car-markt-web /usr/share/nginx/html
+COPY --from=builder /app/dist/apps/car-markt-web/browser /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
