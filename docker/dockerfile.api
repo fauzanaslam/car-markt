@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY nx.json ./
 COPY tsconfig.base.json ./
-COPY apps/api ./apps/api
+COPY apps/car-markt-be ./apps/car-markt-be
 
 # Install dependencies
 RUN npm install
@@ -20,4 +20,4 @@ RUN npx nx build car-markt-be
 EXPOSE 3000
 
 # Start the backend
-CMD ["node", "dist/apps/api/main.js"]
+CMD ["node", "dist/apps/car-markt-be/main.js"]
