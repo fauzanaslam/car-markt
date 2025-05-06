@@ -3,21 +3,21 @@ version: '3.8'
 services:
   api:
     build:
-      context: .
-      dockerfile: docker/dockerfile.api
+      context: ./docker
+      dockerfile: dockerfile.api
     container_name: api
     ports:
-      - "8009:3000"
+      - "3000:3000"
     networks:
       - app-network
 
   frontend:
     build:
-      context: .
-      dockerfile: docker/dockerfile.frontend
+      context: ./docker
+      dockerfile: dockerfile.frontend
     container_name: frontend
     ports:
-      - "4009:80"
+      - "80:80"
     depends_on:
       - api
     networks:
