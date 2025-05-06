@@ -1,14 +1,28 @@
-# docker/Dockerfile.api
-
-FROM node:18-alpine
+# Stage 1: Build NestJS app with Nx
+FROM node:18 AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-
+# Salin semua file dari root monorepo
 COPY . .
 
-RUN  npx nx build car-markt-be
+# Install deps
+RUN npm install
 
+# Build specific app
+RUN npx nx build car-markt-be
+
+# Stage 2: Run built NestJS app
+FROM node:18
+
+WORKDIR /app
+
+# Salin hasil build dari stage sebelumnya
+COPY --from=builder /app/dist/apps/car-markt-be ./dist
+
+# Salin deps untuk run-time
+COPY --from=builder /app/package*.json ./
+RUN npm install --production
+
+EXPOSE 3000
 CMD ["node", "dist/main.js"]
