@@ -1,0 +1,94 @@
+{
+  "name": "car-markt-web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/car-markt-web/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/car-markt-web",
+        "index": "apps/car-markt-web/src/index.html",
+        "browser": "apps/car-markt-web/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/car-markt-web/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/car-markt-web/public"
+          }
+        ],
+        "styles": ["apps/car-markt-web/src/styles.css"],
+        "scripts": [],
+        "server": "apps/car-markt-web/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/car-markt-web/src/server.ts"
+        },
+        "prerender": true
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "car-markt-web:build:production"
+        },
+        "development": {
+          "buildTarget": "car-markt-web:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "car-markt-web:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/car-markt-web/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "car-markt-web:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/car-markt-web/browser",
+        "spa": true
+      }
+    }
+  }
+}

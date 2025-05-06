@@ -8,6 +8,12 @@
     },
     {
       "path": "./apps/car-markt-be"
+    },
+    {
+      "path": "./apps/car-markt-web-e2e"
+    },
+    {
+      "path": "./apps/car-markt-web"
     }
   ]
 }
