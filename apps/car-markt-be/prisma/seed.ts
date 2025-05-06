@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { PrismaClient } from '../src/generated/prisma/client';
 import { productsList } from './productsList';
 
