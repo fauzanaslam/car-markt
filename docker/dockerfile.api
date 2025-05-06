@@ -3,26 +3,23 @@ FROM node:18 AS builder
 
 WORKDIR /app
 
-# Salin semua file dari root monorepo
-COPY . .
-
-# Install deps
+COPY package*.json ./
 RUN npm install
 
-# Build specific app
-RUN npx nx build car-markt-be:build
+# Salin semua file dari monorepo
+COPY . .
+
+RUN npx nx build car-markt-be
 
 # Stage 2: Run built NestJS app
 FROM node:18
 
 WORKDIR /app
 
-# Salin hasil build dari stage sebelumnya
-COPY --from=builder /app/apps/car-markt-be/dist ./
-
-# Salin deps untuk run-time
 COPY --from=builder /app/package*.json ./
 RUN npm install --production
 
+COPY --from=builder /app/dist/apps/car-markt-be ./dist
+
 EXPOSE 3000
-CMD ["node", "apps/car-markt-be/dist/main.js"]
+CMD ["node", "dist/main.js"]
