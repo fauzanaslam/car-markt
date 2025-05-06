@@ -9,7 +9,6 @@ COPY package*.json ./
 COPY nx.json ./
 COPY tsconfig.base.json ./
 COPY apps/api ./apps/api
-COPY libs ./libs
 
 # Install dependencies
 RUN npm install
