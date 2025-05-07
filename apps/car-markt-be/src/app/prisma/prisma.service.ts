@@ -1,6 +1,5 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "../../../src/generated/prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
