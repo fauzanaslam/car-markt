@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY . .
 RUN npm install
+RUN npx prisma generate
 RUN npx nx build car-markt-be
 
 # Stage 2: Run
@@ -17,6 +18,9 @@ COPY --from=builder /app/apps/car-markt-be/dist ./apps/car-markt-be/dist
 
 # Copy only production dependencies
 COPY --from=builder /app/package*.json ./
+
+COPY --from=builder /app/apps/car-markt-be/prisma/app/generated ./apps/car-markt-be/prisma/app/generated
+
 RUN npm install --production
 
 EXPOSE 3000
