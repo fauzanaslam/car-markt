@@ -20,13 +20,13 @@ COPY . .
 RUN npm install -g prisma
  
 # Generate the Prisma client
-RUN npm run prisma generate
+RUN npx prisma generate
  
 # Reset data & push schema to DB
 # RUN yarn prisma:db:push:reset
  
 # Migrate
-RUN npm run prisma migrate deploy
+RUN npx prisma migrate deploy
  
 # Seeding master data for the first time
 # RUN yarn db:seed
@@ -34,7 +34,7 @@ RUN npm run prisma migrate deploy
 # Expose port 3000 for the application to listen on
 EXPOSE 3000
  
-RUN npm run nest build
+RUN npx nest build
  
 # Start the server using the production build
 ENTRYPOINT ["node", "dist/src/main.js"]
