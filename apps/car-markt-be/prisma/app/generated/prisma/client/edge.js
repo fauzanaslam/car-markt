@@ -169,6 +169,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -176,8 +180,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../..",
   "clientVersion": "6.7.0",
@@ -195,8 +198,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"app/generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id            String      @id @default(uuid())\n  name          String\n  description   String\n  price         Float\n  image         String\n  stripePriceId String\n  isFeatured    Boolean     @default(false)\n  orderItems    OrderItem[]\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel Order {\n  id          String      @id @default(uuid())\n  userId      String?\n  status      OrderStatus @default(PENDING)\n  totalAmount Float\n  paymentId   String?\n  items       OrderItem[]\n  createdAt   DateTime    @default(now())\n  updatedAt   DateTime    @updatedAt\n}\n\nmodel OrderItem {\n  id        Int     @id @default(autoincrement())\n  orderId   String\n  productId String\n  quantity  Int\n  price     Float\n  order     Order   @relation(fields: [orderId], references: [id])\n  product   Product @relation(fields: [productId], references: [id])\n}\n\nenum OrderStatus {\n  PENDING\n  STARTED_DELIVERY\n  DELIVERED\n}\n",
-  "inlineSchemaHash": "de9620d61f9df5c2882e511369f5f7cd84c44dafdb05ef15876e61c6541012f6",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"app/generated/prisma/client\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id            String      @id @default(uuid())\n  name          String\n  description   String\n  price         Float\n  image         String\n  stripePriceId String\n  isFeatured    Boolean     @default(false)\n  orderItems    OrderItem[]\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel Order {\n  id          String      @id @default(uuid())\n  userId      String?\n  status      OrderStatus @default(PENDING)\n  totalAmount Float\n  paymentId   String?\n  items       OrderItem[]\n  createdAt   DateTime    @default(now())\n  updatedAt   DateTime    @updatedAt\n}\n\nmodel OrderItem {\n  id        Int     @id @default(autoincrement())\n  orderId   String\n  productId String\n  quantity  Int\n  price     Float\n  order     Order   @relation(fields: [orderId], references: [id])\n  product   Product @relation(fields: [productId], references: [id])\n}\n\nenum OrderStatus {\n  PENDING\n  STARTED_DELIVERY\n  DELIVERED\n}\n",
+  "inlineSchemaHash": "edfd670c472a67b921eaaac8c996153600f066cd1efb36dfdfebd4829387cb9d",
   "copyEngine": true
 }
 config.dirname = '/'
