@@ -9,6 +9,9 @@ COPY . .
 # Install deps
 RUN npm install
 
+RUN npx prisma generate --schema=apps/car-markt-be/prisma/schema.prisma
+
+
 # Build specific app
 RUN npx nx build car-markt-be
 
