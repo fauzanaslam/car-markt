@@ -18,11 +18,11 @@ FROM node:18
 WORKDIR /app
 
 # Salin hasil build dari stage sebelumnya
-COPY --from=builder apps/car-markt-be/dist ./
+COPY --from=builder /app/apps/car-markt-be/dist ./
 
 # Salin deps untuk run-time
 COPY --from=builder /app/package*.json ./
 RUN npm install --production
 
 EXPOSE 3000
-CMD ["node", "apps/car-markt-be/dist/main.js"]
+CMD ["node", "/app/apps/car-markt-be/dist/main.js"]
