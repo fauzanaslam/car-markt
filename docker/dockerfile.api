@@ -20,6 +20,7 @@ COPY --from=builder /app/apps/car-markt-be/dist ./apps/car-markt-be/dist
 COPY --from=builder /app/package*.json ./
 
 COPY --from=builder /app/apps/car-markt-be/prisma ./apps/car-markt-be/prisma
+COPY --from=builder /app/apps/car-markt-be/prisma/app/generated/prisma/client ./apps/car-markt-be/prisma/app/generated/prisma/client
 
 RUN npm install --production
 
