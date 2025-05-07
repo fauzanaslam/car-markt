@@ -1,12 +1,25 @@
-# Stage 2: Run
+# Stage 1: Build NestJS app with Nx
+FROM node:18 AS builder
+
+WORKDIR /app
+
+# Salin semua file dari root monorepo
+COPY . .
+
+# Install deps
+RUN npm install
+
+# Build specific app
+RUN npx nx build car-markt-be
+
+# Stage 2: Run built NestJS app
 FROM node:18
 
 WORKDIR /app
 
-# Copy built output
+# Salin hasil build dari stage sebelumnya
 COPY --from=builder /app/apps/car-markt-be/dist ./apps/car-markt-be/dist
 
-# Copy only production dependencies
 COPY --from=builder /app/package*.json ./
 RUN npm install --production
 
@@ -18,5 +31,4 @@ COPY --from=builder /app/node_modules/@prisma /app/node_modules/@prisma
 COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
 
 EXPOSE 3000
-
 CMD ["node", "apps/car-markt-be/dist/main.js"]
