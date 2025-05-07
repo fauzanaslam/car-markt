@@ -1,40 +1,23 @@
-# Stage 1: Build the app
-FROM node:20.17.0-alpine AS builder
+# Stage 1: Build NestJS app with Nx
+FROM node:18 AS builder
 
 WORKDIR /app
 
-# Copy dependencies
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copy full monorepo
 COPY . .
-
-# Generate Prisma client
-RUN npx prisma generate
-
-# Build only the backend app using Nx
+RUN npm install
 RUN npx nx build car-markt-be
 
-# Stage 2: Production container
-FROM node:20.17.0-alpine
+# Stage 2: Run built app
+FROM node:18
 
 WORKDIR /app
 
-# Install only production dependencies
-COPY package.json package-lock.json ./
-RUN npm install --omit=dev
+# Salin hasil build
+COPY --from=builder apps/car-markt-be/dist ./
 
-# Copy built NestJS app
-COPY --from=builder /app/dist/apps/car-markt-be ./dist/apps/car-markt-be
-
-# Copy Prisma client (it will be in node_modules/.prisma)
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/prisma ./prisma
-
-# Prisma deploy (optional, depending on how you manage schema updates)
-RUN npx prisma migrate deploy
+# Salin deps
+COPY --from=builder /app/package*.json ./
+RUN npm install --production
 
 EXPOSE 3000
-
-CMD ["node", "dist/apps/car-markt-be/main.js"]
+CMD ["node", "apps/car-markt-be/dist/main.js"]
