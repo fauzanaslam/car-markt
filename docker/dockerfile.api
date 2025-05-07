@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY . .
 RUN npm install
+RUN rm -rf node_modules/.prisma
 RUN npx prisma generate --schema=apps/car-markt-be/prisma/schema.prisma
 RUN npx nx build car-markt-be
 
