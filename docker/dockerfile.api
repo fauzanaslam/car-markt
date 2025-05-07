@@ -1,40 +1,40 @@
-# Use Node.js version 20 as the base image
-FROM node:20.17.0-alpine
- 
-# Set the working directory to /app
+# Stage 1: Build the app
+FROM node:20.17.0-alpine AS builder
+
 WORKDIR /app
- 
-# Copy the package.json and yarn.lock files to the container
+
+# Copy dependencies
 COPY package.json package-lock.json ./
- 
-# Install Yarn globally
-#RUN npm install yarn --location=global
- 
-# Install the dependencies using Yarn
 RUN npm install
- 
-# Copy the rest of the application code to the container
+
+# Copy full monorepo
 COPY . .
- 
-# Install Prisma globally (if necessary, you can use yarn global add prisma)
-RUN npm install -g prisma
- 
-# Generate the Prisma client
+
+# Generate Prisma client
 RUN npx prisma generate
- 
-# Reset data & push schema to DB
-# RUN yarn prisma:db:push:reset
- 
-# Migrate
+
+# Build only the backend app using Nx
+RUN npx nx build car-markt-be
+
+# Stage 2: Production container
+FROM node:20.17.0-alpine
+
+WORKDIR /app
+
+# Install only production dependencies
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev
+
+# Copy built NestJS app
+COPY --from=builder /app/dist/apps/car-markt-be ./dist/apps/car-markt-be
+
+# Copy Prisma client (it will be in node_modules/.prisma)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/prisma ./prisma
+
+# Prisma deploy (optional, depending on how you manage schema updates)
 RUN npx prisma migrate deploy
- 
-# Seeding master data for the first time
-# RUN yarn db:seed
- 
-# Expose port 3000 for the application to listen on
+
 EXPOSE 3000
- 
-RUN npx nest build
- 
-# Start the server using the production build
-ENTRYPOINT ["node", "dist/src/main.js"]
+
+CMD ["node", "dist/apps/car-markt-be/main.js"]
