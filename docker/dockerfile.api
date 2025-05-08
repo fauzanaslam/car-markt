@@ -33,7 +33,5 @@ COPY --from=builder /app/apps/car-markt-be/prisma ./apps/car-markt-be/prisma
 COPY --from=builder /app/node_modules/@prisma /app/node_modules/@prisma
 COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
 
-COPY .env .env
-
 EXPOSE 3000
 CMD ["node", "apps/car-markt-be/dist/main.js"]
