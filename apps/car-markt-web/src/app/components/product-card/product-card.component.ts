@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '@prisma/client';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Product } from '../../../../../car-markt-be/src/generated/prisma/client';
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule],
