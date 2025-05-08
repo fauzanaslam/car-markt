@@ -1,5 +1,6 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
-import { Product } from '@prisma/client';
+import { Product } from '../../../../car-markt-be/src/generated/prisma/client';
 import { Apollo, gql } from 'apollo-angular';
 import { inject } from '@angular/core';
 import { tap } from 'rxjs';
