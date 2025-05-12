@@ -27,18 +27,18 @@ export class CheckoutService {
 
     const session = await snap.createTransaction({
       transaction_details: {
-        order_id: `ORDER-${order.id}-${Date.now()}`,
-        gross_amount: createCheckoutDto.totalAmount,
+        order_id: `ORDER-${order.id}`,
+        gross_amount: Math.round(createCheckoutDto.totalAmount),
       },
       item_details: createCheckoutDto.items.map((item) => ({
         id: item.productId?.toString() || item.name,
         name: item.name,
         quantity: item.quantity,
-        price: item.price,
+        price: Math.round(item.price),
       })),
       custom_field1: order.id.toString(),
       callbacks: {
-        finish: `${process.env.FRONTEND_URL}/checkout/success?orderID=${order.id}`,
+        finish: `${process.env.FRONTEND_URL}/checkout/success?orderId=${order.id}`,
       },
     });
 
