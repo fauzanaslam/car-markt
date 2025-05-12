@@ -50,7 +50,8 @@
     "seed": "npx ts-node ./prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0"
+    "@prisma/client": "^6.7.0",
+    "midtrans-client": "^1.4.2"
   },
   "devDependencies": {
     "prisma": "^6.7.0"

@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
 import { OrdersService } from '../orders/orders.service';
-import {stripe} from 'stripe';
+const midtransClient = require('midtrans-client');
 
-const stripeSecret = process.env.STRIPE_SECRET_KEY;
+const midtransServerKey = 'SB-Mid-server-QjkbVXUHZ2WkdUqGaeJgoALp';
+const midtransClientKey = 'SB-Mid-client-ep61NmLiMhdEmi7M';
 
-if (!stripeSecret) {
-  throw new Error('Missing Stripe secret key');
+if (!midtransServerKey || !midtransClientKey) {
+  throw new Error('Missing Midtrans configuration');
 }
 
-const stripe = new stripe(stripeSecret);
+const snap = new midtransClient.Snap({
+  serverKey: midtransServerKey,
+  clientKey: midtransClientKey,
+});
 
 @Injectable()
 export class CheckoutService {
@@ -20,30 +24,28 @@ export class CheckoutService {
       items: createCheckoutDto.items,
       totalAmount: createCheckoutDto.totalAmount,
     });
-  }
 
-  const session = await stripe.Checkout.sessions.create({
-    line_items: createCheckoutDto.items.map((item) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: item.price * 100,
+    const session = await snap.createTransaction({
+      transaction_details: {
+        order_id: `ORDER-${order.id}-${Date.now()}`,
+        gross_amount: createCheckoutDto.totalAmount,
       },
-      quantity: item.quantity,
-    })),
-    mode: 'payment',
-    success_url: `${process.env.FRONTEND_URL}/checkout/success?orderID=${order.id}`,
-    cancel_url: `${process.env.FRONTEND_URL}/checkout/cancel`,
-    metadata: {
-      orderId: order.id,
-    },
-  });
+      item_details: createCheckoutDto.items.map((item) => ({
+        id: item.productId?.toString() || item.name,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      custom_field1: order.id.toString(),
+      callbacks: {
+        finish: `${process.env.FRONTEND_URL}/checkout/success?orderID=${order.id}`,
+      },
+    });
 
-  return {
-    url: session.url,
-    sessionId: session.id,
-    orderId: order.id,
+    return {
+      url: session.redirect_url,
+      sessionId: session.token,
+      orderId: order.id,
+    };
   }
 }
