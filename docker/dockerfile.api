@@ -20,16 +20,10 @@ FROM node:18
 
 WORKDIR /app
 
-# Salin hasil build dari stage sebelumnya
 COPY --from=builder /app/apps/car-markt-be/dist ./apps/car-markt-be/dist
-
-COPY --from=builder /app/package*.json ./
-RUN npm install --production
-
-# Copy Prisma schema (optional, if used in runtime)
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/apps/car-markt-be/prisma ./apps/car-markt-be/prisma
-
-# Copy generated Prisma client & engines
 COPY --from=builder /app/node_modules/@prisma /app/node_modules/@prisma
 COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
 
