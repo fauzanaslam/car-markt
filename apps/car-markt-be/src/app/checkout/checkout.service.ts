@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
 import { OrdersService } from '../orders/orders.service';
-const midtransClient = require('midtrans-client');
+import midtransClient from 'midtrans-client';
 
 const midtransServerKey = 'SB-Mid-server-QjkbVXUHZ2WkdUqGaeJgoALp';
 const midtransClientKey = 'SB-Mid-client-ep61NmLiMhdEmi7M';
