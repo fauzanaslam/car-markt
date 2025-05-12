@@ -4,10 +4,14 @@ export const appRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: 'home',
+  },
+  {
+    path: 'home',
     loadComponent: async () => {
       const mod = await import('./home/home.component.js');
       return mod.HomeComponent;
-    }
+    },
   },
   {
     path: 'products',
@@ -33,15 +37,23 @@ export const appRoutes: Route[] = [
   {
     path: 'checkout/cancel',
     loadComponent: async () => {
-      const mod = await import('./checkout/checkout-failure/checkout-failure.component.js');
+      const mod = await import(
+        './checkout/checkout-failure/checkout-failure.component.js'
+      );
       return mod.CheckoutFailureComponent;
     },
   },
   {
     path: 'checkout/success',
     loadComponent: async () => {
-      const mod = await import('./checkout/checkout-success/checkout-success.component.js');
+      const mod = await import(
+        './checkout/checkout-success/checkout-success.component.js'
+      );
       return mod.CheckoutSuccessComponent;
     },
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
   },
 ];
