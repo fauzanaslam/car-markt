@@ -38,7 +38,7 @@ export class CheckoutService {
       })),
       custom_field1: order.id.toString(),
       callbacks: {
-        finish: `http://82.112.240.66:4009/checkout/success?orderId=${order.id}`,
+        finish: `http://82.112.240.66/checkout/success?orderId=${order.id}`,
       },
     });
 

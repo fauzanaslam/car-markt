@@ -19,7 +19,7 @@ services:
       dockerfile: docker/dockerfile.frontend
     container_name: frontend
     ports:
-      - "4009:80"
+      - "80:80"
     depends_on:
       - api
     networks:
