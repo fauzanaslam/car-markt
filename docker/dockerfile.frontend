@@ -8,6 +8,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+COPY prisma ./prisma
+
+# Generate Prisma client
+RUN npx prisma generate
 
 RUN npx nx build car-markt-web --verbose
 RUN mv dist/apps/car-markt-web/browser/index.csr.html dist/apps/car-markt-web/browser/index.html
