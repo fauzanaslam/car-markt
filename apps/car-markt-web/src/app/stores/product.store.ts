@@ -3,7 +3,8 @@ import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { Product } from '../../../../car-markt-be/src/generated/prisma/client';
 import { Apollo, gql } from 'apollo-angular';
 import { inject } from '@angular/core';
-import { catchError, EMPTY, map, tap } from 'rxjs';
+import { catchError, EMPTY, map, pipe, switchMap, tap } from 'rxjs';
+import { rxMethod } from "@ngrx/signals/rxjs-interop";
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -17,6 +18,19 @@ const GET_PRODUCTS = gql`
     }
   }
 `;
+
+const GET_FEATURED_PRODUCTS = gql`
+query GetFeaturedProducts($featured: Boolean) {
+  products(featured: $featured) {
+  id
+  name
+  description
+  price
+  image
+  stripePriceId
+  isFeatured
+}
+}`
 
 const SEARCH_PRODUCTS = gql`
   query SearchProducts($searchTerm: String!) {
@@ -75,6 +89,26 @@ export const ProductStore = signalStore(
         )
         .subscribe();
     },
+    getFeaturedProducts: rxMethod<boolean>(
+      pipe(
+        switchMap((featured) =>
+          apollo.query<{ products: Product[] }>({
+            query: GET_FEATURED_PRODUCTS,
+            variables: { featured },
+          })
+        ),
+        tap({
+          next: ({ data }) =>
+            patchState(store, {
+              products: data.products,
+              loading: false,
+              error: null,
+            }),
+          error: (error) =>
+            patchState(store, { error: error.message, loading: false }),
+        })
+      )
+    ),
     searchProducts(term: string) {
       patchState(store, { loading: true, error: null });
       apollo
