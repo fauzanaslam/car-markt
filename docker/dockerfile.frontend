@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . .
 
-RUN npx nx build car-markt-web
+RUN npx nx build car-markt-web --verbose
 RUN mv dist/apps/car-markt-web/browser/index.csr.html dist/apps/car-markt-web/browser/index.html
 
 
