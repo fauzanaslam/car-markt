@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ProductCardComponent } from '../components/product-card/product-card.component';
 import { RouterLink } from '@angular/router';
-import { Product } from '@prisma/client';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Product } from '../../../../car-markt-be/prisma/app/generated/prisma/client';
 import { ProductStore } from '../stores/product.store';
 import { CartStore } from '../stores/cart.store';
 
