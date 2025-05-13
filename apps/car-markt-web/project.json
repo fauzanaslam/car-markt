@@ -7,7 +7,7 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@ngx-env/builder:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/car-markt-web",
@@ -23,6 +23,9 @@
         ],
         "styles": ["apps/car-markt-web/src/styles.css"],
         "scripts": [],
+        "ngxEnv": {
+          "prefix": "NG_APP"
+        },
         "server": "apps/car-markt-web/src/main.server.ts",
         "ssr": {
           "entry": "apps/car-markt-web/src/server.ts"
@@ -58,7 +61,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@ngx-env/builder:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "car-markt-web:build:production"
@@ -70,7 +73,7 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@ngx-env/builder:extract-i18n",
       "options": {
         "buildTarget": "car-markt-web:build"
       }
